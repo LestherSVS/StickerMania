@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo | Stickers Mania Chile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Poppins', sans-serif; margin:0; background:#fff; color:#111; }
+    nav { background:#000; display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; }
+    nav .logo { font-size:1.5rem; color:#fff; font-weight:600; }
+    nav ul { list-style:none; display:flex; gap:1rem; margin:0; padding:0; }
+    nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
+    nav ul li a:hover { color:#25D366; }
+    h1 { text-align:center; margin:2rem 0 1rem 0; color:#25D366; }
+    .products { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1.2rem; max-width:1100px; margin:2rem auto; }
+    .product-card { background:#fff; border-radius:14px; padding:1rem; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+    .product-img { width:100%; height:120px; object-fit:cover; border-radius:8px; background:#eee; }
+    .product-title { font-size:1rem; margin:0.5rem 0; font-weight:600; }
+    .product-price { font-weight:bold; color:#25D366; }
+    .buy-btn {
+      background: #25D366;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+    .buy-btn:hover {
+      background: #128C7E;
+    }
+    .cart-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cart-btn.cart-animate {
+      animation: cart-bounce 0.5s;
+    }
+    @keyframes cart-bounce {
+      0% { transform: scale(1); box-shadow: 0 4px 16px rgba(0,0,0,0.12);}
+      30% { transform: scale(1.2); box-shadow: 0 8px 24px rgba(37,211,102,0.25);}
+      60% { transform: scale(0.95);}
+      100% { transform: scale(1); box-shadow: 0 4px 16px rgba(0,0,0,0.12);}
+    }
+    .buy-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 8px rgba(37,211,102,0.18);
+    }
+    footer { background:#000; color:#fff; padding:1rem; text-align:center; margin-top:2rem; }
+    .socials { display:flex; gap:1rem; justify-content:center; margin-top:1rem; }
+    .socials a { color:#fff; font-size:1.5rem; }
+    .cart-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .cart-modal.active {
+      display: flex;
+    }
+    .cart-content {
+      background: #fff;
+      border-radius: 18px;
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      max-width: 340px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      position: relative;
+    }
+    .cart-close {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      color: #111;
+      cursor: pointer;
+    }
+    .cart-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #25D366;
+      margin-bottom: 1rem;
+    }
+    .cart-total {
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+      color: #222;
+    }
+    .cart-pay-btn {
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+    .cart-pay-btn:hover {
+      background: #128C7E;
+    }
+    .cart-list {
+      text-align: left;
+      margin-bottom: 1rem;
+      font-size: 0.98rem;
+      color: #333;
+    }
+    .avatar-container {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      z-index: 3000;
+      height: 160px;
+      width: 160px;
+      pointer-events: auto;
+      background: none;
+      transition: opacity 0.3s;
+    }
+    .avatar-img {
+      width: 140px;
+      height: 140px;
+      background: none;
+      object-fit: contain;
+      transition: transform 0.2s;
+    }
+    .chat-bubble {
+      position: absolute;
+      left: 145px;
+      bottom: 60px;
+      min-width: 120px;
+      max-width: 260px;
+      background: #25D366;
+      color: #fff;
+      border-radius: 18px;
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      font-family: 'Poppins', sans-serif;
+      animation: bubble-pop 0.4s;
+      pointer-events: auto;
+    }
+    .luffy-chatbot-modal {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 4000;
+      justify-content: center;
+      align-items: flex-end;
+      background: rgba(0,0,0,0.18);
+    }
+    .luffy-chatbot-modal.active {
+      display: flex;
+    }
+    .luffy-chatbot-content {
+      background: #fff;
+      border-radius: 18px 18px 0 0;
+      padding: 1.2rem 1rem 1rem 1rem;
+      max-width: 350px;
+      width: 96%;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.13);
+      text-align: left;
+      position: relative;
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .luffy-chatbot-header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.7rem;
+    }
+    .luffy-chatbot-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: contain;
+      background: none;
+    }
+    .luffy-chatbot-title {
+      font-weight: 600;
+      color: #25D366;
+      font-size: 1.1rem;
+    }
+    .luffy-chatbot-close {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      color: #111;
+      cursor: pointer;
+    }
+    .luffy-chatbot-messages {
+      width: 100%;
+      min-height: 80px;
+      max-height: 180px;
+      overflow-y: auto;
+      margin-bottom: 0.7rem;
+      font-size: 1rem;
+    }
+    .luffy-chatbot-message {
+      margin-bottom: 0.5rem;
+      background: #f3f3f3;
+      border-radius: 12px;
+      padding: 0.5rem 0.8rem;
+      color: #222;
+      max-width: 90%;
+      word-break: break-word;
+    }
+    .luffy-chatbot-message.bot {
+      background: #25D366;
+      color: #fff;
+      align-self: flex-start;
+    }
+    .luffy-chatbot-message.user {
+      background: #e0e0e0;
+      color: #222;
+      align-self: flex-end;
+    }
+    .luffy-chatbot-input-row {
+      width: 100%;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .luffy-chatbot-input {
+      flex: 1;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding: 0.5rem 0.8rem;
+      font-size: 1rem;
+      outline: none;
+    }
+    .luffy-chatbot-send {
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .luffy-chatbot-send:hover {
+      background: #128C7E;
+    }
+    @keyframes bubble-pop {
+      0% { transform: scale(0.7); opacity: 0;}
+      80% { transform: scale(1.05);}
+      100% { transform: scale(1); opacity: 1;}
+    }
+    @media (max-width:600px) {
+      nav { flex-direction:column; padding:1rem; }
+      .products { grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <nav id="menu">
+    <div class="logo">🖤 Stickers Mania</div>
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="catalogo.html">Catálogo</a></li>
+      <li><a href="clientes.html">Clientes</a></li>
+      <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+      <li><a href="personalizados.html">Personalizados</a></li>
+      <li><a href="envios.html">Envíos</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="redes.html">Redes</a></li>
+    </ul>
+  </nav>
+
+  <h1>Catálogo de Lotes Disponibles!</h1>
+  <div class="products" id="product-list"></div>
+  <button class="cart-btn" id="cartBtn">Carrito (0)</button>
+
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <button class="cart-close" onclick="closeCartModal()">&times;</button>
+      <div class="cart-title">¡Gracias por tu compra!</div>
+      <div class="cart-list" id="cartList"></div>
+      <div class="cart-total" id="cartTotal"></div>
+      <button class="cart-pay-btn" id="payBtn">Pagar por WhatsApp</button>
+    </div>
+  </div>
+
+  <div class="avatar-container" id="avatarContainer">
+    <img src="Imagenes_Pagina_1/one.gif" class="avatar-img" alt="Luffy Avatar" id="luffyAvatarImg">
+    <div class="chat-bubble" id="chatBubble"></div>
+  </div>
+  <div class="luffy-chatbot-modal" id="luffyChatbotModal">
+    <div class="luffy-chatbot-content">
+      <button class="luffy-chatbot-close" onclick="closeLuffyChatbot()">&times;</button>
+      <div class="luffy-chatbot-header">
+        <img src="Imagenes_Pagina_1/quieto.png" class="luffy-chatbot-img" alt="Luffy hablando" id="luffyChatbotGif">
+        <span class="luffy-chatbot-title">Luffy Bot</span>
+      </div>
+      <div class="luffy-chatbot-messages" id="luffyChatbotMessages"></div>
+      <form class="luffy-chatbot-input-row" id="luffyChatbotForm" autocomplete="off">
+        <input type="text" class="luffy-chatbot-input" id="luffyChatbotInput" placeholder="Escribe tu mensaje..." required>
+        <button type="submit" class="luffy-chatbot-send">Enviar</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 StickersMania</p>
+    <div class="socials">
+      <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+      <a href="https://wa.me/56978999527" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </footer>
+
+  <audio id="mouseSound" src="Imagenes_Pagina_1/Mouse.mp3" preload="auto"></audio>
+  
+  <script>
+  const products = [
+    { name: "Lote Tokyo Revengers", price: 3500, img: "Imagenes_Pagina_1/Tokyo_Revengers.jpg" },
+    { name: "Lote Spy x Family", price: 3500, img: "Imagenes_Pagina_1/Spy_x_Family.jpg" },
+    { name: "Lote Sailor Moon", price: 3500, img: "Imagenes_Pagina_1/Sailor_Moon.jpg" },
+    { name: "Lote Marcas Variadas", price: 4000, img: "Imagenes_Pagina_1/Marcas.jpg" },
+    { name: "Lote Pokémon", price: 3500, img: "Imagenes_Pagina_1/Pokemon.jpg" },
+    { name: "Lote One Punch Man", price: 3500, img: "Imagenes_Pagina_1/One_Punch_Man.jpg" },
+    { name: "Lote One Piece", price: 3500, img: "Imagenes_Pagina_1/One_Piece.jpg" },
+    { name: "Lote Naruto", price: 3500, img: "Imagenes_Pagina_1/Naruto.jpg" },
+    { name: "Lote Meme Gentleman", price: 2500, img: "Imagenes_Pagina_1/Meme.png" },
+    { name: "Lote Demon Slayer", price: 3500, img: "Imagenes_Pagina_1/Kimetsu_No_Yaiba.jpg" },
+    { name: "Lote Kawaii Pack", price: 4000, img: "Imagenes_Pagina_1/Kawaii.jpg" },
+    { name: "Lote Evangelion", price: 3500, img: "Imagenes_Pagina_1/Evangelion.jpg" },
+    { name: "Lote Jujutsu Kaisen", price: 3500, img: "Imagenes_Pagina_1/Jujutsu.jpg" },
+    { name: "Lote Dragon Ball", price: 3500, img: "Imagenes_Pagina_1/Dragon_Ball.jpg" },
+    { name: "Lote Bleach", price: 3500, img: "Imagenes_Pagina_1/Bleach.jpg" },
+    { name: "Lote Attack on Titan", price: 3500, img: "Imagenes_Pagina_1/Attack_on_Titan.jpg" }
+  ];
+
+  let cart = [];
+
+  function renderProducts() {
+    const list = document.getElementById('product-list');
+    list.innerHTML = products.map((p, i) => `
+      <div class="product-card">
+        <img src="${p.img}" class="product-img" alt="${p.name}">
+        <div class="product-title">${p.name}</div>
+        <div class="product-price">$${p.price}</div>
+        <button class="buy-btn" onclick="addToCart(${i}, this)">Agregar al carrito</button>
+      </div>
+    `).join('');
+  }
+
+  function addToCart(index, btn) {
+    cart.push(products[index]);
+    updateCartBtn();
+    // Animación de carrito
+    const cartBtn = document.getElementById('cartBtn');
+    cartBtn.classList.add('cart-animate');
+    setTimeout(() => cartBtn.classList.remove('cart-animate'), 500);
+    // Feedback visual en el botón de compra
+    btn.textContent = "¡Agregado!";
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = "Agregar al carrito";
+      btn.disabled = false;
+    }, 1200);
+    // Reproducir sonido de compra (con reinicio)
+    const audio = document.getElementById('buySound');
+    audio.currentTime = 0;
+    audio.play();
+  }
+
+  function updateCartBtn() {
+    document.getElementById('cartBtn').textContent = `Carrito (${cart.length})`;
+  }
+
+  function openCartModal() {
+    if (cart.length === 0) {
+      alert('El carrito está vacío.');
+      return;
+    }
+    // Mostrar productos y total
+    let listHtml = '';
+    let total = 0;
+    cart.forEach((item, i) => {
+      listHtml += `${i+1}. ${item.name} - $${item.price}<br>`;
+      total += item.price;
+    });
+    document.getElementById('cartList').innerHTML = listHtml;
+    document.getElementById('cartTotal').textContent = `Total a pagar: $${total}`;
+    document.getElementById('cartModal').classList.add('active');
+  }
+
+  function closeCartModal() {
+    document.getElementById('cartModal').classList.remove('active');
+  }
+
+  document.getElementById('cartBtn').onclick = openCartModal;
+
+  document.getElementById('payBtn').onclick = function() {
+    let mensaje = "¡Hola! Quiero comprar los siguientes stickers:%0A";
+    let total = 0;
+    cart.forEach((item, i) => {
+      mensaje += `${i+1}. ${item.name} - $${item.price}%0A`;
+      total += item.price;
+    });
+    mensaje += `%0ATotal: $${total}`;
+    window.open(`https://wa.me/56978999527?text=${mensaje}`, '_blank');
+  };
+
+  // Permite reproducir el sonido en cada click sin que se corte o se bugee
+  function playMouseSound() {
+    const audio = document.getElementById('mouseSound');
+    // Clona el audio para permitir múltiples reproducciones simultáneas
+    const clone = audio.cloneNode();
+    clone.currentTime = 1; // Cambia a 0 para que el sonido se reproduzca desde el inicio, sin retraso
+    clone.play();
+  }
+  document.body.addEventListener('click', playMouseSound, true);
+  document.body.addEventListener('touchstart', playMouseSound, true);
+
+  // Frases random para el avatar de Luffy corriendo
+  const luffyRunPhrases = [
+    "¡Bienvenido a Stickers Mania!",
+    "¿Buscas tus stickers favoritos?",
+    "¡Aprovecha las ofertas!",
+    "¡Agrega tus stickers al carrito!",
+    "¿Necesitas ayuda? Haz click en Luffy.",
+    "¡Stickers de anime y cultura pop aquí!",
+    "¡Personaliza tu pedido!",
+    "¡Envíos a todo Chile!",
+    "¡Hola nakama! 👋",
+    "¡Elige tu lote favorito!"
+  ];
+
+  // Chat bubble para el avatar corriendo
+  const chatBubble = document.getElementById('chatBubble');
+  function showRunPhrase() {
+    const phrase = luffyRunPhrases[Math.floor(Math.random() * luffyRunPhrases.length)];
+    chatBubble.textContent = phrase;
+  }
+  showRunPhrase();
+  setInterval(showRunPhrase, 7000);
+
+  // Animación de avatar caminando por el borde inferior
+  let avatarPos = 0;
+  let avatarDirection = 1;
+  const avatarContainer = document.getElementById('avatarContainer');
+  function moveAvatar() {
+    avatarPos += avatarDirection * 2;
+    const maxPos = window.innerWidth - 160;
+    if (avatarPos > maxPos) avatarDirection = -1;
+    if (avatarPos < 0) avatarDirection = 1;
+    avatarContainer.style.left = avatarPos + 'px';
+    avatarContainer.querySelector('.avatar-img').style.transform = avatarDirection === 1 ? 'scaleX(1)' : 'scaleX(-1)';
+    requestAnimationFrame(moveAvatar);
+  }
+  moveAvatar();
+
+  // Abrir chatbot al tocar/clickear avatar
+  avatarContainer.addEventListener('click', function() {
+    document.getElementById('luffyChatbotModal').classList.add('active');
+    document.getElementById('luffyChatbotInput').focus();
+  });
+  avatarContainer.addEventListener('touchstart', function() {
+    document.getElementById('luffyChatbotModal').classList.add('active');
+    document.getElementById('luffyChatbotInput').focus();
+  });
+
+  // Cerrar chatbot
+  function closeLuffyChatbot() {
+    document.getElementById('luffyChatbotModal').classList.remove('active');
+  }
+
+  // Chatbot lógica con ChatGPT
+  const luffyChatbotMessages = document.getElementById('luffyChatbotMessages');
+  const luffyChatbotForm = document.getElementById('luffyChatbotForm');
+  const luffyChatbotInput = document.getElementById('luffyChatbotInput');
+  const luffyChatbotGif = document.getElementById('luffyChatbotGif');
+
+  function addLuffyMessage(text, sender = "bot", showWhatsapp = false) {
+    const msg = document.createElement('div');
+    msg.className = `luffy-chatbot-message ${sender}`;
+    msg.textContent = text;
+    if (showWhatsapp) {
+      const btn = document.createElement('button');
+      btn.innerHTML = '<i class="fab fa-whatsapp"></i> WhatsApp';
+      btn.style.background = '#25D366';
+      btn.style.color = '#fff';
+      btn.style.border = 'none';
+      btn.style.borderRadius = '6px';
+      btn.style.padding = '0.3rem 0.7rem';
+      btn.style.fontSize = '0.95rem';
+      btn.style.marginLeft = '8px';
+      btn.style.cursor = 'pointer';
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        window.open('https://wa.me/56978999527?text=¡Hola! Quiero consultar sobre los stickers.', '_blank');
+      };
+      msg.appendChild(btn);
+    }
+    luffyChatbotMessages.appendChild(msg);
+    luffyChatbotMessages.scrollTop = luffyChatbotMessages.scrollHeight;
+  }
+
+  // Saludo inicial con botón WhatsApp
+  addLuffyMessage(
+    "¡Hola! Soy Luffy, ¿en qué te ayudo con tus stickers? Si quieres más respuestas rápidas, háblame al WhatsApp.",
+    "bot",
+    true
+  );
+
+  luffyChatbotForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const userText = luffyChatbotInput.value.trim();
+    if (!userText) return;
+    addLuffyMessage(userText, "user");
+    luffyChatbotInput.value = "";
+
+    // Cambia el gif del bot a hablando.gif cuando responde
+    luffyChatbotGif.src = "Imagenes_Pagina_1/hablando.gif";
+    document.getElementById('luffyAvatarImg').src = "Imagenes_Pagina_1/hablando.gif";
+
+    // --- ChatGPT API ---
+    const apiKey = 'TU_API_KEY';
+    const endpoint = 'https://api.openai.com/v1/chat/completions';
+    const systemPrompt = "Eres Luffy Bot, un asistente amable y divertido que ayuda a los clientes a comprar stickers y lotes de anime, cultura pop y personalizados. Responde siempre de forma educada y relacionada a la venta de productos, y saluda de vez en cuando. Si el usuario quiere más respuestas, recomiéndale escribir al WhatsApp y muestra el botón.";
+    const messages = [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userText }
+    ];
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: messages,
+          max_tokens: 80,
+          temperature: 0.7
+        })
+      });
+      const data = await response.json();
+      let botReply = "¡Lo siento! No pude responder en este momento.";
+      let showWhatsapp = false;
+      if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+        botReply = data.choices[0].message.content;
+        // Si la respuesta contiene "WhatsApp", muestra el botón
+        if (botReply.toLowerCase().includes("whatsapp")) showWhatsapp = true;
+      }
+      addLuffyMessage(botReply, "bot", showWhatsapp);
+    } catch (err) {
+      addLuffyMessage("¡Ups! No pude conectarme con ChatGPT. Intenta nuevamente.", "bot");
+    }
+    setTimeout(() => {
+      luffyChatbotGif.src = "Imagenes_Pagina_1/quieto.png";
+      document.getElementById('luffyAvatarImg').src = "Imagenes_Pagina_1/one.gif";
+    }, 1200);
+  });
+
+  renderProducts();
+  </script>
+</body>
+</html>

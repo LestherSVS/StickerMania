@@ -282,6 +282,81 @@
       nav { flex-direction:column; padding:1rem; }
       .products { grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); }
     }
+    /* Interfaz especial para Android */
+    @media only screen and (max-width: 600px) and (pointer: coarse) {
+      nav { flex-direction:column; padding:0.7rem; }
+      .logo { font-size:1.2rem; }
+      h1 { font-size:1.1rem; margin:1.2rem 0 0.7rem 0; }
+      .products { grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:0.7rem; }
+      .product-card { padding:0.7rem; font-size:0.97rem; }
+      .product-img { height:80px; }
+      .product-title { font-size:0.95rem; }
+      .product-price { font-size:0.98rem; }
+      .buy-btn, .cart-btn, .cart-pay-btn {
+        font-size:0.98rem;
+        padding:0.5rem 1rem;
+        border-radius:8px;
+      }
+      .cart-btn {
+        bottom: 12px;
+        right: 12px;
+        padding: 0.7rem 1.1rem;
+        font-size: 1rem;
+      }
+      .cart-content {
+        padding: 1.2rem 0.7rem 1rem 0.7rem;
+        max-width: 98vw;
+        width: 98vw;
+      }
+      .cart-title { font-size:1.1rem; }
+      .cart-total { font-size:1rem; }
+      .cart-list { font-size:0.95rem; }
+      .avatar-container {
+        height: 100px;
+        width: 100px;
+      }
+      .avatar-img {
+        width: 80px;
+        height: 80px;
+      }
+      .chat-bubble {
+        left: 90px;
+        bottom: 30px;
+        min-width: 80px;
+        max-width: 160px;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.7rem;
+      }
+      .luffy-chatbot-content {
+        max-width: 98vw;
+        width: 98vw;
+        padding: 0.7rem 0.5rem 0.7rem 0.5rem;
+      }
+      .luffy-chatbot-header {
+        gap: 0.4rem;
+        margin-bottom: 0.4rem;
+      }
+      .luffy-chatbot-img {
+        width: 40px;
+        height: 40px;
+      }
+      .luffy-chatbot-title {
+        font-size: 1rem;
+      }
+      .luffy-chatbot-messages {
+        font-size: 0.95rem;
+        min-height: 60px;
+        max-height: 120px;
+      }
+      .luffy-chatbot-input {
+        font-size: 0.95rem;
+        padding: 0.4rem 0.6rem;
+      }
+      .luffy-chatbot-send {
+        font-size: 0.95rem;
+        padding: 0.4rem 0.8rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -343,6 +418,7 @@
   </footer>
 
   <audio id="mouseSound" src="Imagenes_Pagina_1/Mouse.mp3" preload="auto"></audio>
+  <audio id="buySound" src="Imagenes_Pagina_1/Mouse.mp3" preload="auto"></audio>
   
   <script>
   const products = [
@@ -392,7 +468,7 @@
       btn.textContent = "Agregar al carrito";
       btn.disabled = false;
     }, 1200);
-    // Reproducir sonido de compra (con reinicio)
+    // Sonido solo en botón de compra
     const audio = document.getElementById('buySound');
     audio.currentTime = 0;
     audio.play();
@@ -435,6 +511,20 @@
     mensaje += `%0ATotal: $${total}`;
     window.open(`https://wa.me/56978999527?text=${mensaje}`, '_blank');
   };
+
+  // Solo reproducir sonido en botones, no en todo el body
+  function playMouseSound() {
+    const audio = document.getElementById('mouseSound');
+    const clone = audio.cloneNode();
+    clone.currentTime = 0;
+    clone.play();
+  }
+
+  // Asignar sonido solo a botones de compra y carrito
+  document.querySelectorAll('.buy-btn, .cart-btn, .cart-pay-btn, .luffy-chatbot-send').forEach(btn => {
+    btn.addEventListener('click', playMouseSound);
+    btn.addEventListener('touchend', playMouseSound);
+  });
 
   // Permite reproducir el sonido en cada click sin que se corte o se bugee
   function playMouseSound() {

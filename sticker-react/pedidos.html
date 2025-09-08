@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Pedidos | Manía Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: #101a13;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .pedidos-section {
+      width: 100%;
+      max-width: 520px;
+      margin: 48px auto 0 auto;
+      background: #181f1b;
+      border: 2px solid #00ff88;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #00ff8822;
+      padding: 32px 18px 24px 18px;
+      color: #00ff88;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .pedidos-title {
+      font-size: 2rem;
+      margin-bottom: 18px;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 12px #00ff8844;
+    }
+    #pedidos-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px 0;
+      color: #b6ffda;
+      text-align: left;
+    }
+    #pedidos-list li {
+      margin-bottom: 10px;
+      font-size: 1.08rem;
+      background: #101a13;
+      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1px solid #00ff8844;
+    }
+    .no-pedidos {
+      color: #b6ffda;
+      font-size: 1.1rem;
+      margin: 24px 0;
+    }
+    .volver-btn {
+      display: inline-block;
+      margin-top: 18px;
+      background: #00ff88;
+      color: #101a13;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .volver-btn:hover {
+      background: #b6ffda;
+    }
+    @media (max-width: 600px) {
+      .pedidos-section {
+        max-width: 98vw;
+        padding: 18px 2vw 14px 2vw;
+      }
+      .pedidos-title {
+        font-size: 1.3rem;
+      }
+      #pedidos-list li {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="pedidos-section">
+    <h2 class="pedidos-title">📦 Mis Pedidos</h2>
+    <ul id="pedidos-list"></ul>
+    <div class="no-pedidos" id="no-pedidos" style="display:none;">No tienes pedidos guardados.</div>
+    <a href="index.html" class="volver-btn">← Volver al inicio</a>
+  </section>
+
+  <script>
+    // Recuperar pedidos de localStorage (simulación)
+    let pedidos = [];
+    try {
+      pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+    } catch { pedidos = []; }
+
+    function renderPedidos() {
+      const list = document.getElementById('pedidos-list');
+      const noPedidos = document.getElementById('no-pedidos');
+      list.innerHTML = '';
+      if (!pedidos.length) {
+        noPedidos.style.display = 'block';
+        return;
+      }
+      noPedidos.style.display = 'none';
+      pedidos.forEach((pedido, idx) => {
+        let html = `<strong>Pedido #${idx + 1}</strong><br>`;
+        html += pedido.productos.map(item =>
+          `${item.cantidad} x ${item.nombre} ($${(item.precio * item.cantidad).toLocaleString('es-CL')})`
+        ).join('<br>');
+        html += `<br><b>Total: $${pedido.total.toLocaleString('es-CL')}</b><br>`;
+        html += `<span style="font-size:0.95em;color:#b6ffda;">${pedido.fecha || ''}</span>`;
+        list.innerHTML += `<li>${html}</li>`;
+      });
+    }
+
+    renderPedidos();
+  </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Favoritos | Manía Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: #101a13;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .favoritos-section {
+      width: 100%;
+      max-width: 520px;
+      margin: 48px auto 0 auto;
+      background: #181f1b;
+      border: 2px solid #00ff88;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #00ff8822;
+      padding: 32px 18px 24px 18px;
+      color: #00ff88;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .favoritos-title {
+      font-size: 2rem;
+      margin-bottom: 18px;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 12px #00ff8844;
+    }
+    #favoritos-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px 0;
+      color: #b6ffda;
+      text-align: left;
+    }
+    #favoritos-list li {
+      margin-bottom: 10px;
+      font-size: 1.08rem;
+      background: #101a13;
+      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1px solid #00ff8844;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .no-favoritos {
+      color: #b6ffda;
+      font-size: 1.1rem;
+      margin: 24px 0;
+    }
+    .volver-btn {
+      display: inline-block;
+      margin-top: 18px;
+      background: #00ff88;
+      color: #101a13;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .volver-btn:hover {
+      background: #b6ffda;
+    }
+    .fav-img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #181f1b;
+      border: 1px solid #00ff8844;
+    }
+    @media (max-width: 600px) {
+      .favoritos-section {
+        max-width: 98vw;
+        padding: 18px 2vw 14px 2vw;
+      }
+      .favoritos-title {
+        font-size: 1.3rem;
+      }
+      #favoritos-list li {
+        font-size: 1rem;
+      }
+    }
+    /* Fondo animado: partículas y brillos */
+    .animated-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .bg-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      animation: glow-move 12s linear infinite alternate;
+    }
+    .bg-glow1 {
+      width: 420px; height: 420px;
+      background: #00ff88;
+      left: -120px; top: -120px;
+      animation-delay: 0s;
+    }
+    .bg-glow2 {
+      width: 320px; height: 320px;
+      background: #b6ffda;
+      right: -100px; top: 40vh;
+      animation-delay: 2s;
+    }
+    .bg-glow3 {
+      width: 260px; height: 260px;
+      background: #00ff88;
+      left: 50vw; bottom: -120px;
+      animation-delay: 4s;
+    }
+    @keyframes glow-move {
+      0% { transform: scale(1) translateY(0);}
+      100% { transform: scale(1.2) translateY(40px);}
+    }
+    .bg-particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.7;
+      background: #00ff88;
+      animation: particle-move 8s linear infinite;
+    }
+    .bg-p1 { width: 8px; height: 8px; left: 10vw; top: 30vh; animation-delay: 0s;}
+    .bg-p2 { width: 12px; height: 12px; left: 80vw; top: 60vh; animation-delay: 2s;}
+    .bg-p3 { width: 6px; height: 6px; left: 60vw; top: 10vh; animation-delay: 4s;}
+    .bg-p4 { width: 10px; height: 10px; left: 30vw; top: 80vh; animation-delay: 1s;}
+    .bg-p5 { width: 7px; height: 7px; left: 70vw; top: 40vh; animation-delay: 3s;}
+    @keyframes particle-move {
+      0% { transform: translateY(0) scale(1);}
+      50% { opacity: 1;}
+      100% { transform: translateY(-60px) scale(1.3); opacity: 0.2;}
+    }
+  </style>
+</head>
+<body>
+  <section class="favoritos-section">
+    <h2 class="favoritos-title">⭐ Favoritos</h2>
+    <ul id="favoritos-list"></ul>
+    <div class="no-favoritos" id="no-favoritos" style="display:none;">No tienes productos favoritos guardados.</div>
+    <a href="index.html" class="volver-btn">← Volver al inicio</a>
+  </section>
+
+  <!-- Fondo animado: partículas y brillos -->
+  <div class="animated-bg">
+    <div class="bg-glow bg-glow1"></div>
+    <div class="bg-glow bg-glow2"></div>
+    <div class="bg-glow bg-glow3"></div>
+    <div class="bg-particle bg-p1"></div>
+    <div class="bg-particle bg-p2"></div>
+    <div class="bg-particle bg-p3"></div>
+    <div class="bg-particle bg-p4"></div>
+    <div class="bg-particle bg-p5"></div>
+  </div>
+
+  <script>
+    // Recuperar favoritos de localStorage (simulación)
+    let favoritos = [];
+    try {
+      favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
+    } catch { favoritos = []; }
+
+    function renderFavoritos() {
+      const list = document.getElementById('favoritos-list');
+      const noFav = document.getElementById('no-favoritos');
+      list.innerHTML = '';
+      if (!favoritos.length) {
+        noFav.style.display = 'block';
+        return;
+      }
+      noFav.style.display = 'none';
+      favoritos.forEach((item) => {
+        list.innerHTML += `<li>
+          <img class="fav-img" src="${item.img || ''}" alt="${item.nombre || ''}">
+          <span>${item.nombre || ''} <b>$${item.precio ? item.precio.toLocaleString('es-CL') : ''}</b></span>
+        </li>`;
+      });
+    }
+
+    renderFavoritos();

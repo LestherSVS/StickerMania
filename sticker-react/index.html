@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Manía Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: #101a13;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    #loader-bg {
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #101a13;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s cubic-bezier(.77,0,.18,1), visibility 0.6s;
+    }
+
+    /* Loader animado */
+    .galaxy-loader {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 32px #00ff8899);
+    }
+    .galaxy-loader .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 12px solid transparent;
+      border-top: 12px solid #00ff88;
+      border-right: 12px solid #00ff88;
+      box-shadow: 0 0 48px #00ff8899;
+      animation: spin-ring 1.2s linear infinite;
+    }
+    .galaxy-loader .ring1 {
+      width: 220px;
+      height: 220px;
+      animation-duration: 1.2s;
+      opacity: 0.7;
+    }
+    .galaxy-loader .ring2 {
+      width: 150px;
+      height: 150px;
+      animation-direction: reverse;
+      animation-duration: 1.8s;
+      border-top: 12px solid #b6ffda;
+      border-right: 12px solid #b6ffda;
+      box-shadow: 0 0 32px #b6ffda99;
+      opacity: 0.7;
+    }
+    .galaxy-loader .star {
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      background: radial-gradient(circle, #00ff88 60%, #101a13 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 48px 12px #00ff8899, 0 0 0 4px #b6ffda;
+      animation: star-pulse 1.2s infinite alternate;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+    .galaxy-loader .loader-title {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: #101a13; /* Cambiado a negro */
+      font-size: 2rem; /* Más grande para mejor centrado visual */
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-shadow: 0 0 16px #00ff88cc, 0 2px 8px #00ff8855;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      z-index: 4;
+      animation: title-fade 1.2s cubic-bezier(.77,0,.18,1) infinite alternate;
+      pointer-events: none;
+      user-select: none;
+      text-align: center;
+      width: 100%;
+      line-height: 1.1;
+    }
+    .galaxy-loader .loader-glow {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 260px;
+      height: 260px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, #00ff8822 0%, transparent 70%);
+      z-index: 0;
+      animation: glow-pulse 1.5s infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes spin-ring {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+    @keyframes star-pulse {
+      0% { box-shadow: 0 0 48px 12px #00ff8899, 0 0 0 4px #b6ffda; }
+      100% { box-shadow: 0 0 72px 24px #00ff88cc, 0 0 0 12px #b6ffda; }
+    }
+    @keyframes title-fade {
+      0% { opacity: 1; letter-spacing: 2px;}
+      100% { opacity: 0.7; letter-spacing: 6px;}
+    }
+    @keyframes glow-pulse {
+      0% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    .loader-text {
+      color: #00ff88;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px #00ff8855;
+    }
+    .loader-img {
+      width: 100vw;
+      height: 100vh;
+      max-width: 100vw;
+      max-height: 100vh;
+      object-fit: cover;
+      border-radius: 0;
+      box-shadow: none;
+      display: block;
+      transition: opacity 0.7s cubic-bezier(.77,0,.18,1);
+    }
+    .vertical-menu-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 90vh;
+      width: 100%;
+      animation: fadeInMenu 1.2s cubic-bezier(.77,0,.18,1);
+      margin-top: 32px; /* Nuevo: separa del top */
+    }
+    @keyframes fadeInMenu {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: none;}
+    }
+    .vertical-menu-title {
+      font-size: 2.7rem;
+      font-weight: 700;
+      color: #00ff88;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 12px #00ff8855;
+      letter-spacing: 1px;
+      text-align: center;
+      animation: titlePop 1s cubic-bezier(.77,0,.18,1);
+    }
+    @keyframes titlePop {
+      from { opacity: 0; transform: scale(0.8);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    .vertical-menu-subtitle {
+      color: #b6ffda;
+      font-size: 1.15rem;
+      margin-bottom: 32px;
+      text-align: center;
+      opacity: 0.8;
+      letter-spacing: 0.5px;
+      animation: fadeInMenu 1.5s 0.2s backwards;
+    }
+    .vertical-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: center;
+      width: 100%;
+      max-width: 340px;
+      margin-bottom: 36px;
+    }
+    .vertical-menu-btn {
+      background: #181f1b;
+      color: #00ff88;
+      font-size: 1.18rem;
+      font-weight: 600;
+      padding: 14px 0;
+      border-radius: 18px;
+      margin: 0;
+      text-decoration: none;
+      box-shadow: 0 2px 12px #00ff8833;
+      border: 2px solid #00ff88;
+      outline: none;
+      transition: 
+        background 0.22s cubic-bezier(.77,0,.18,1),
+        color 0.22s cubic-bezier(.77,0,.18,1),
+        transform 0.18s cubic-bezier(.77,0,.18,1),
+        box-shadow 0.18s,
+        border 0.18s;
+      letter-spacing: .5px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      min-width: 180px;
+      max-width: 260px;
+      cursor: pointer;
+      animation: btnFadeIn 0.8s cubic-bezier(.77,0,.18,1);
+    }
+    @keyframes btnFadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: none;}
+    }
+    .vertical-menu-btn:hover, .vertical-menu-btn:focus {
+      background: linear-gradient(90deg, #00ff88 0%, #0f3d2e 100%);
+      color: #101a13;
+      transform: scale(1.07) translateY(-2px);
+      box-shadow: 0 6px 24px #00ff8855;
+      border: 2px solid #b6ffda;
+      z-index: 1;
+    }
+    .vertical-menu-btn:active {
+      background: #00b86b;
+      color: #fff;
+      transform: scale(0.98);
+      border: 2px solid #fff;
+    }
+    .vertical-menu-btn::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #00ff88 0%, #b6ffda 100%);
+      border-radius: 2px;
+      transition: width 0.35s cubic-bezier(.77,0,.18,1), left 0.35s cubic-bezier(.77,0,.18,1);
+      z-index: 2;
+    }
+    .vertical-menu-btn:hover::after, .vertical-menu-btn:focus::after {
+      width: 80%;
+      left: 10%;
+    }
+
+    /* Botones horizontales */
+    .horizontal-menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .horizontal-menu-btn {
+      background: #181f1b;
+      color: #00ff88;
+      font-size: 1.08rem;
+      font-weight: 600;
+      padding: 12px 32px;
+      border-radius: 18px;
+      text-decoration: none;
+      box-shadow: 0 2px 12px #00ff8833;
+      border: 2px solid #00ff88;
+      outline: none;
+      transition: 
+        background 0.22s cubic-bezier(.77,0,.18,1),
+        color 0.22s cubic-bezier(.77,0,.18,1),
+        transform 0.18s cubic-bezier(.77,0,.18,1),
+        box-shadow 0.18s,
+        border 0.18s;
+      letter-spacing: .5px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-width: 120px;
+      cursor: pointer;
+      animation: btnFadeIn 0.8s cubic-bezier(.77,0,.18,1);
+    }
+    .horizontal-menu-btn:hover, .horizontal-menu-btn:focus {
+      background: linear-gradient(90deg, #00ff88 0%, #0f3d2e 100%);
+      color: #101a13;
+      transform: scale(1.07) translateY(-2px);
+      box-shadow: 0 6px 24px #00ff8855;
+      border: 2px solid #b6ffda;
+      z-index: 1;
+    }
+    .horizontal-menu-btn:active {
+      background: #00b86b;
+      color: #fff;
+      transform: scale(0.98);
+      border: 2px solid #fff;
+    }
+    .horizontal-menu-btn::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #00ff88 0%, #b6ffda 100%);
+      border-radius: 2px;
+      transition: width 0.35s cubic-bezier(.77,0,.18,1), left 0.35s cubic-bezier(.77,0,.18,1);
+      z-index: 2;
+    }
+    .horizontal-menu-btn:hover::after, .horizontal-menu-btn:focus::after {
+      width: 80%;
+      left: 10%;
+    }
+    .slider-container {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto 32px auto;
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px #00ff8822, 0 2px 16px #0003;
+      background: #181f1b;
+    }
+    .slider {
+      display: flex;
+      transition: transform 0.7s cubic-bezier(.77,0,.18,1);
+      will-change: transform;
+    }
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      padding: 18px 0;
+    }
+    .slide img {
+      width: 90%;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px #0004;
+      background: #101a13;
+      transition: transform 0.4s cubic-bezier(.77,0,.18,1);
+    }
+    .slide img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 32px #00ff8899;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #00ff88cc;
+      border: none;
+      color: #101a13;
+      font-size: 2rem;
+      padding: 6px 16px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 2;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 2px 8px #00ff8866;
+      user-select: none;
+    }
+    .slider-btn:hover {
+      background: #b6ffda;
+      color: #101a13;
+      transform: translateY(-50%) scale(1.12);
+    }
+    .slider-btn.prev { left: 12px; }
+    .slider-btn.next { right: 12px; }
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 12px 0 10px 0;
+    }
+    .slider-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00ff8855;
+      border: 2px solid #00ff88;
+      cursor: pointer;
+      transition: background 0.2s, border 0.2s;
+    }
+    .slider-dot.active {
+      background: #00ff88;
+      border: 2px solid #fff;
+    }
+    @media (max-width: 700px) {
+      .vertical-menu-title { font-size: 2rem; }
+      .vertical-menu { max-width: 98vw; }
+      .vertical-menu-btn { font-size: 1rem; max-width: 98vw; }
+      .horizontal-menu-btn { font-size: 0.95rem; padding: 10px 10vw; }
+      .slider-container { max-width: 98vw; }
+      .slide img { width: 98%; max-height: 120px; }
+    }
+    /* Estilos para la sección de catálogo */
+    .catalogo-section {
+      width: 100%;
+      max-width: 1100px;
+      margin: 48px auto 0 auto;
+      padding: 0 16px;
+    }
+    .catalogo-title {
+      color: #00ff88;
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 32px;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 12px #00ff8844;
+    }
+    .catalogo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      justify-items: center;
+    }
+    .catalogo-card {
+      background: #181f1b;
+      border: 2px solid #00ff88;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #00ff8822;
+      padding: 24px 16px 18px 16px;
+      text-align: center;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .catalogo-card:hover {
+      transform: translateY(-8px) scale(1.04);
+      box-shadow: 0 8px 32px #00ff8899;
+    }
+    .catalogo-card img {
+      width: 100%;
+      max-width: 140px;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 14px;
+      border-radius: 10px;
+      background: #101a13;
+      box-shadow: 0 2px 8px #00ff8822;
+    }
+    .catalogo-card h3 {
+      color: #00ff88;
+      margin: 0 0 8px 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .catalogo-card p {
+      color: #b6ffda;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    @keyframes titlePop {
+      from { opacity: 0; transform: scale(0.8);}
+      to { opacity: 1; transform: scale(1);}
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader animado genial con texto Store Manía -->
+  <div id="loader-bg">
+    <div class="galaxy-loader">
+      <span class="ring ring1"></span>
+      <span class="ring ring2"></span>
+      <span class="star"></span>
+      <span class="loader-title">Manía Store</span>
+      <span class="loader-glow"></span>
+      <!-- Personaje animado sobre el anillo eliminado -->
+    </div>
+  </div>
+  <div class="vertical-menu-container">
+    <!-- SLIDER INICIO -->
+    <div class="slider-container">
+      <div class="slider" id="slider">
+        <div class="slide"><img src="/Imagenes_Productos/Prod_Cajapokemon.png" alt="Caja Pokémon"></div>
+        <div class="slide"><img src="/Imagenes_Productos/Prod_Lapicesop.png" alt="Lápices OP"></div>
+        <div class="slide"><img src="/Imagenes_Productos/Prod_Lapicesuchiha.png" alt="Lápices Uchiha"></div>
+        <div class="slide"><img src="/Imagenes_Productos/Prod_Pikachu.png" alt="Pikachu"></div>
+        <div class="slide"><img src="/Imagenes_Productos/Prod_Rollostickerkny.png" alt="Rollo Sticker KNY"></div>
+        <div class="slide"><img src="/Imagenes_Productos/Prod_Stickersdragonball.png" alt="Stickers Dragon Ball"></div>
+        <div class="slide"><img src="/Imagenes_Productos/Prod_Stickersrickymorty.png" alt="Stickers Rick y Morty"></div>
+      </div>
+      <button class="slider-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+      <button class="slider-btn next" onclick="moveSlide(1)">&#10095;</button>
+      <div class="slider-dots" id="slider-dots"></div>
+    </div>
+    <!-- FIN SLIDER -->
+
+    <h1 class="vertical-menu-title">Manía Store</h1>
+    <div class="vertical-menu-subtitle">Elige una sección para continuar</div>
+    <div class="vertical-menu">
+      <a href="/" class="vertical-menu-btn">🏠 Inicio</a>
+      <a href="catalogo.html" class="vertical-menu-btn">🛍️ Catálogo</a>
+      <a href="#" class="vertical-menu-btn">🛒 Carrito</a>
+      <a href="#" class="vertical-menu-btn">📦 Mis pedidos</a>
+      <a href="#" class="vertical-menu-btn">⭐ Favoritos</a>
+      <a href="#" class="vertical-menu-btn">💳 Suscripciones</a>
+      <a href="#" class="vertical-menu-btn">👤 Mi cuenta</a>
+      <a href="#" class="vertical-menu-btn">📞 Contacto</a>
+      <a href="#" class="vertical-menu-btn">❓ Ayuda</a>
+    </div>
+  </div>
+
+  <script>
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const loader = document.getElementById('loader-bg');
+    loader.style.opacity = '0';
+    loader.style.visibility = 'hidden';
+    setTimeout(() => loader.remove(), 700);
+  }, 200); // Loader visible por solo 0.2 segundos
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const slider = document.getElementById('slider');
+  const dotsContainer = document.getElementById('slider-dots');
+
+  function showSlide(index) {
+    if (index < 0) currentSlide = slides.length - 1;
+    else if (index >= slides.length) currentSlide = 0;
+    else currentSlide = index;
+    slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+    updateDots();
+  }
+  function moveSlide(n) {
+    showSlide(currentSlide + n);
+  }
+  function updateDots() {
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < slides.length; i++) {
+      const dot = document.createElement('span');
+      dot.className = 'slider-dot' + (i === currentSlide ? ' active' : '');
+      dot.onclick = () => showSlide(i);
+      dotsContainer.appendChild(dot);
+    }
+  }
+  showSlide(0);
+  setInterval(() => moveSlide(1), 4000);
+
+  // Exponer funciones globalmente para los botones
+  window.moveSlide = moveSlide;
+});
+  </script>
+</body>
+</html>

@@ -1,72 +1,227 @@
+<!-- Loader Mania Store -->
+<div id="loader-bg">
+  <div class="galaxy-loader">
+    <span class="ring ring1"></span>
+    <span class="ring ring2"></span>
+    <span class="star"></span>
+    <span class="loader-title">Store Manía</span>
+    <span class="loader-glow"></span>
+  </div>
+</div>
+
 <!-- Catálogo de productos moderno -->
 <section class="catalogo-section">
   <h2 class="catalogo-title">Catálogo de Productos</h2>
-  <div class="catalogo-grid">
+  <div class="catalogo-grid" id="catalogo-grid">
     <div class="catalogo-card">
-      <img src="/sticker-react/Imagenes_Productos/Prod_Cajapokemon.png" alt="Caja Pokémon">
+      <img src="/sticker-react/public/Imagenes_Productos/Prod_Cajapokemon.png" alt="Caja Pokémon">
       <h3>Caja Pokémon</h3>
-      <p>$30</p>
+      <p>$7.990</p>
+      <button onclick="agregarAlCarrito(0)">Agregar al carrito</button>
     </div>
     <div class="catalogo-card">
-      <img src="sticker-react\public\Imagenes_Productos\Prod_Lapicesop.png" alt="Lápices OP">
+      <img src="/sticker-react/public/Imagenes_Productos/Prod_Lapicesop.png" alt="Lápices OP">
       <h3>Lápices OP</h3>
-      <p>$20</p>
+      <p>$4.990</p>
+      <button onclick="agregarAlCarrito(1)">Agregar al carrito</button>
     </div>
     <div class="catalogo-card">
-      <img src="sticker-react\public\Imagenes_Productos\Prod_Lapicesuchiha.png" alt="Lápices Uchiha">
+      <img src="/sticker-react/public/Imagenes_Productos/Prod_Lapicesuchiha.png" alt="Lápices Uchiha">
       <h3>Lápices Uchiha</h3>
-      <p>$20</p>
+      <p>$4.990</p>
+      <button onclick="agregarAlCarrito(2)">Agregar al carrito</button>
     </div>
     <div class="catalogo-card">
-      <img src="sticker-react\public\Imagenes_Productos\Prod_Pikachu.png" alt="Pikachu">
+      <img src="/sticker-react/public/Imagenes_Productos/Prod_Pikachu.png" alt="Pikachu">
       <h3>Pikachu</h3>
-      <p>$15</p>
+      <p>$5.990</p>
+      <button onclick="agregarAlCarrito(3)">Agregar al carrito</button>
     </div>
     <div class="catalogo-card">
-      <img src="/Imagenes_Productos/Prod_Rollostickerkny.png" alt="Rollo Sticker KNY">
+      <img src="/sticker-react/public/Imagenes_Productos/Prod_Rollostickerkny.png" alt="Rollo Sticker KNY">
       <h3>Rollo Sticker KNY</h3>
-      <p>$25</p>
+      <p>$4.990</p>
+      <button onclick="agregarAlCarrito(4)">Agregar al carrito</button>
     </div>
     <div class="catalogo-card">
-      <img src="/Imagenes_Productos/Prod_Stickersdragonball.png" alt="Stickers Dragon Ball">
+      <img src="/sticker-react/public/Imagenes_Productos/Prod_Stickersdragonball.png" alt="Stickers Dragon Ball">
       <h3>Stickers Dragon Ball</h3>
-      <p>$18</p>
+      <p>$3.990</p>
+      <button onclick="agregarAlCarrito(5)">Agregar al carrito</button>
     </div>
     <div class="catalogo-card">
-      <img src="/Imagenes_Productos/Prod_Stickersrickymorty.png" alt="Stickers Rick y Morty">
+      <img src="/sticker-react/public/Imagenes_Productos/Prod_Stickersrickymorty.png" alt="Stickers Rick y Morty">
       <h3>Stickers Rick y Morty</h3>
-      <p>$18</p>
+      <p>$3.990</p>
+      <button onclick="agregarAlCarrito(6)">Agregar al carrito</button>
     </div>
+  </div>
+  <div class="carrito-box" id="carrito-box">
+    <h3>🛒 Carrito</h3>
+    <ul id="carrito-list"></ul>
+    <div id="carrito-total"></div>
+    <button id="whatsapp-btn" style="display:none;">Enviar pedido por WhatsApp</button>
   </div>
 </section>
 
+<!-- Fondo animado: partículas y brillos -->
+<div class="animated-bg">
+  <div class="bg-glow bg-glow1"></div>
+  <div class="bg-glow bg-glow2"></div>
+  <div class="bg-glow bg-glow3"></div>
+  <div class="bg-particle bg-p1"></div>
+  <div class="bg-particle bg-p2"></div>
+  <div class="bg-particle bg-p3"></div>
+  <div class="bg-particle bg-p4"></div>
+  <div class="bg-particle bg-p5"></div>
+</div>
+
 <style>
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #101a13;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Loader Mania Store */
+#loader-bg {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  background: #101a13;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s cubic-bezier(.77,0,.18,1), visibility 0.6s;
+}
+.galaxy-loader {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 32px #00ff8899);
+}
+.galaxy-loader .ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 12px solid transparent;
+  border-top: 12px solid #00ff88;
+  border-right: 12px solid #00ff88;
+  box-shadow: 0 0 48px #00ff8899;
+  animation: spin-ring 1.2s linear infinite;
+}
+.galaxy-loader .ring1 {
+  width: 220px;
+  height: 220px;
+  animation-duration: 1.2s;
+  opacity: 0.7;
+}
+.galaxy-loader .ring2 {
+  width: 150px;
+  height: 150px;
+  animation-direction: reverse;
+  animation-duration: 1.8s;
+  border-top: 12px solid #b6ffda;
+  border-right: 12px solid #b6ffda;
+  box-shadow: 0 0 32px #b6ffda99;
+  opacity: 0.7;
+}
+.galaxy-loader .star {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  background: radial-gradient(circle, #00ff88 60%, #101a13 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 48px 12px #00ff8899, 0 0 0 4px #b6ffda;
+  animation: star-pulse 1.2s infinite alternate;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.galaxy-loader .loader-title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #101a13;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-shadow: 0 0 16px #00ff88cc, 0 2px 8px #00ff8855;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  z-index: 4;
+  animation: title-fade 1.2s cubic-bezier(.77,0,.18,1) infinite alternate;
+  pointer-events: none;
+  user-select: none;
+  text-align: center;
+  width: 100%;
+  line-height: 1.1;
+}
+.galaxy-loader .loader-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 260px;
+  height: 260px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #00ff8822 0%, transparent 70%);
+  z-index: 0;
+  animation: glow-pulse 1.5s infinite alternate;
+  pointer-events: none;
+}
+@keyframes spin-ring {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+@keyframes star-pulse {
+  0% { box-shadow: 0 0 48px 12px #00ff8899, 0 0 0 4px #b6ffda; }
+  100% { box-shadow: 0 0 72px 24px #00ff88cc, 0 0 0 12px #b6ffda; }
+}
+@keyframes title-fade {
+  0% { opacity: 1; letter-spacing: 2px;}
+  100% { opacity: 0.7; letter-spacing: 6px;}
+}
+@keyframes glow-pulse {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
 .catalogo-section {
   width: 100%;
   max-width: 1100px;
   margin: 48px auto 0 auto;
-  padding: 0 16px;
+  padding: 0 8px;
 }
 .catalogo-title {
   color: #00ff88;
   text-align: center;
-  font-size: 2.2rem;
+  font-size: 2rem;
   margin-bottom: 32px;
   letter-spacing: 2px;
   text-shadow: 0 2px 12px #00ff8844;
 }
 .catalogo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
   justify-items: center;
 }
 .catalogo-card {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
   background: #181f1b;
   border: 2px solid #00ff88;
   border-radius: 18px;
   box-shadow: 0 4px 24px #00ff8822;
-  padding: 24px 16px 18px 16px;
+  padding: 20px 10px 16px 10px;
   text-align: center;
   transition: transform 0.18s, box-shadow 0.18s;
 }
@@ -77,9 +232,10 @@
 .catalogo-card img {
   width: 100%;
   max-width: 140px;
-  height: 120px;
+  height: auto;
+  max-height: 120px;
   object-fit: contain;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   border-radius: 10px;
   background: #101a13;
   box-shadow: 0 2px 8px #00ff8822;
@@ -87,13 +243,140 @@
 .catalogo-card h3 {
   color: #00ff88;
   margin: 0 0 8px 0;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
 }
 .catalogo-card p {
   color: #b6ffda;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 10px 0;
+}
+.catalogo-card button {
+  background: #00ff88;
+  color: #101a13;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 10px;
+}
+.catalogo-card button:hover {
+  background: #b6ffda;
+}
+.carrito-box {
+  background: #101a13cc;
+  border: 2px solid #00ff88;
+  border-radius: 16px;
+  margin: 40px auto 0 auto;
+  max-width: 400px;
+  padding: 14px 8px;
+  color: #00ff88;
+  box-shadow: 0 2px 16px #00ff8844;
+}
+.carrito-box h3 { margin-top: 0; }
+#carrito-list { list-style: none; padding: 0; margin: 0 0 10px 0; color: #b6ffda; }
+#carrito-list li { margin-bottom: 4px; }
+#carrito-total { font-weight: bold; margin-bottom: 10px; }
+#whatsapp-btn { background: #25d366; color: #fff; border: none; border-radius: 8px; padding: 10px 18px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+#whatsapp-btn:hover { background: #128c7e; }
+
+/* Media queries para pantallas pequeñas */
+@media (max-width: 600px) {
+  .catalogo-section {
+    margin-top: 24px;
+    padding: 0 2vw;
+  }
+  .catalogo-title {
+    font-size: 1.3rem;
+    margin-bottom: 18px;
+  }
+  .catalogo-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .catalogo-card {
+    max-width: 98vw;
+    padding: 14px 4vw 12px 4vw;
+  }
+  .catalogo-card img {
+    max-width: 90vw;
+    max-height: 90vw;
+    margin-bottom: 8px;
+  }
+  .carrito-box {
+    margin: 24px auto 0 auto;
+    font-size: 0.98rem;
+    padding: 10px 2vw;
+  }
 }
 </style>
+
+<script>
+// Loader Mania Store
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const loader = document.getElementById('loader-bg');
+    loader.style.opacity = '0';
+    loader.style.visibility = 'hidden';
+    setTimeout(() => loader.remove(), 700);
+  }, 1500); // Loader visible por 1.5 segundos
+});
+
+const productos = [
+  { nombre: "Caja Pokémon", precio: 7990, img: "/sticker-react/Imagenes_Productos/Prod_Cajapokemon.png" },
+  { nombre: "Lápices OP", precio: 4990, img: "/sticker-react/Imagenes_Productos/Prod_Lapicesop.png" },
+  { nombre: "Lápices Uchiha", precio: 4990, img: "/sticker-react/Imagenes_Productos/Prod_Lapicesuchiha.png" },
+  { nombre: "Pikachu", precio: 5990, img: "/sticker-react/Imagenes_Productos/Prod_Pikachu.png" },
+  { nombre: "Rollo Sticker KNY", precio: 4990, img: "/sticker-react/Imagenes_Productos/Prod_Rollostickerkny.png" },
+  { nombre: "Stickers Dragon Ball", precio: 3990, img: "/sticker-react/Imagenes_Productos/Prod_Stickersdragonball.png" },
+  { nombre: "Stickers Rick y Morty", precio: 3990, img: "/sticker-react/Imagenes_Productos/Prod_Stickersrickymorty.png" }
+];
+
+const carrito = {};
+
+function agregarAlCarrito(idx) {
+  const prod = productos[idx];
+  if (carrito[prod.nombre]) carrito[prod.nombre].cantidad++;
+  else carrito[prod.nombre] = { ...prod, cantidad: 1 };
+  // Guarda el carrito en localStorage
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+  renderCarrito();
+}
+
+function renderCarrito() {
+  const list = document.getElementById('carrito-list');
+  const totalDiv = document.getElementById('carrito-total');
+  const btn = document.getElementById('whatsapp-btn');
+  list.innerHTML = '';
+  let total = 0;
+  let hayProductos = false;
+  for (const nombre in carrito) {
+    const item = carrito[nombre];
+    total += item.precio * item.cantidad;
+    hayProductos = true;
+    list.innerHTML += `<li>${item.cantidad} x ${item.nombre} - $${(item.precio * item.cantidad).toLocaleString('es-CL')}</li>`;
+  }
+  totalDiv.textContent = hayProductos ? `Total: $${total.toLocaleString('es-CL')}` : 'Carrito vacío';
+  btn.style.display = hayProductos ? 'block' : 'none';
+}
+
+document.getElementById('whatsapp-btn').onclick = function() {
+  let mensaje = "¡Hola! Quiero pedir:\n";
+  let total = 0;
+  for (const nombre in carrito) {
+    const item = carrito[nombre];
+    mensaje += `- ${item.cantidad} x ${item.nombre} ($${(item.precio * item.cantidad).toLocaleString('es-CL')})\n`;
+    total += item.precio * item.cantidad;
+  }
+  mensaje += `Total: $${total.toLocaleString('es-CL')}`;
+  const url = `https://wa.me/56978999527?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, '_blank');
+};
+
+renderCarrito();
+window.agregarAlCarrito = agregarAlCarrito;
+</script>

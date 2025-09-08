@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrito | Manía Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: #101a13;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .carrito-section {
+      width: 100%;
+      max-width: 420px;
+      margin: 48px auto 0 auto;
+      background: #181f1b;
+      border: 2px solid #00ff88;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #00ff8822;
+      padding: 32px 18px 24px 18px;
+      color: #00ff88;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .carrito-title {
+      font-size: 2rem;
+      margin-bottom: 18px;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 12px #00ff8844;
+    }
+    #carrito-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px 0;
+      color: #b6ffda;
+      text-align: left;
+    }
+    #carrito-list li {
+      margin-bottom: 6px;
+      font-size: 1.08rem;
+    }
+    #carrito-total {
+      font-weight: bold;
+      margin-bottom: 18px;
+      color: #00ff88;
+      font-size: 1.15rem;
+    }
+    #whatsapp-btn {
+      background: #25d366;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 22px;
+      font-size: 1.08rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 10px;
+    }
+    #whatsapp-btn:hover {
+      background: #128c7e;
+    }
+    .volver-btn {
+      display: inline-block;
+      margin-top: 18px;
+      background: #00ff88;
+      color: #101a13;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .volver-btn:hover {
+      background: #b6ffda;
+    }
+    @media (max-width: 600px) {
+      .carrito-section {
+        max-width: 98vw;
+        padding: 18px 2vw 14px 2vw;
+      }
+      .carrito-title {
+        font-size: 1.3rem;
+      }
+      #carrito-list li {
+        font-size: 1rem;
+      }
+      #carrito-total {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="carrito-section">
+    <h2 class="carrito-title">🛒 Tu Carrito</h2>
+    <ul id="carrito-list"></ul>
+    <div id="carrito-total"></div>
+    <button id="whatsapp-btn" style="display:none;">Enviar pedido por WhatsApp</button>
+    <br>
+    <a href="catalogo.html" class="volver-btn">← Seguir comprando</a>
+  </section>
+
+  <script>
+    // Recuperar carrito de localStorage (si existe)
+    let carrito = {};
+    try {
+      carrito = JSON.parse(localStorage.getItem('carrito')) || {};
+    } catch { carrito = {}; }
+
+    function renderCarrito() {
+      const list = document.getElementById('carrito-list');
+      const totalDiv = document.getElementById('carrito-total');
+      const btn = document.getElementById('whatsapp-btn');
+      list.innerHTML = '';
+      let total = 0;
+      let hayProductos = false;
+      for (const nombre in carrito) {
+        const item = carrito[nombre];
+        total += item.precio * item.cantidad;
+        hayProductos = true;
+        list.innerHTML += `<li>${item.cantidad} x ${item.nombre} - $${(item.precio * item.cantidad).toLocaleString('es-CL')}</li>`;
+      }
+      totalDiv.textContent = hayProductos ? `Total: $${total.toLocaleString('es-CL')}` : 'Carrito vacío';
+      btn.style.display = hayProductos ? 'block' : 'none';
+    }
+
+    document.getElementById('whatsapp-btn').onclick = function() {
+      let mensaje = "¡Hola! Quiero pedir:\n";
+      let total = 0;
+      for (const nombre in carrito) {
+        const item = carrito[nombre];
+        mensaje += `- ${item.cantidad} x ${item.nombre} ($${(item.precio * item.cantidad).toLocaleString('es-CL')})\n`;
+        total += item.precio * item.cantidad;
+      }
+      mensaje += `Total: $${total.toLocaleString('es-CL')}`;
+      const url = `https://wa.me/56978999527?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+    };
+
+    renderCarrito();
+  </script>
+</body>
+</html>

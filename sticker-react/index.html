@@ -462,9 +462,41 @@
       font-weight: 600;
       margin: 0;
     }
-    @keyframes titlePop {
-      from { opacity: 0; transform: scale(0.8);}
-      to { opacity: 1; transform: scale(1);}
+    /* Agrega esto al final de tu <style> en index.html para responsividad de menú */
+    @media (max-width: 600px) {
+      .vertical-menu-container {
+        margin-top: 10px;
+        padding: 0 2vw;
+      }
+      .vertical-menu-title {
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+      }
+      .vertical-menu-subtitle {
+        font-size: 1rem;
+        margin-bottom: 18px;
+      }
+      .vertical-menu {
+        max-width: 98vw;
+        gap: 12px;
+      }
+      .vertical-menu-btn {
+        font-size: 1rem;
+        min-width: 90vw;
+        max-width: 300px;
+        padding: 12px 0;
+      }
+      .vertical-menu-btn > * {
+        font-size: 1.1em;
+      }
+      .slider-container {
+        max-width: 99vw;
+        border-radius: 10px;
+      }
+      .slide img {
+        max-height: 90vw;
+        width: 98vw;
+      }
     }
   </style>
 </head>

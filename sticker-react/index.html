@@ -712,65 +712,6 @@
       border: 2px solid #fff;
       transform: scale(0.98);
     }
-
-    /* Animaciones alrededor de los botones */
-.vertical-menu-btn,
-.horizontal-menu-btn,
-.wave-btn {
-  position: relative;
-  overflow: visible;
-  /* ...resto de tus estilos... */
-}
-
-.vertical-menu-btn::before,
-.horizontal-menu-btn::before,
-.wave-btn::before {
-  content: '';
-  position: absolute;
-  left: 50%; top: 50%;
-  width: 120%;
-  height: 120%;
-  transform: translate(-50%, -50%) scale(0.85);
-  border-radius: 24px;
-  background: radial-gradient(circle at 60% 40%, #ffd70055 0%, transparent 70%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s, transform 0.4s;
-  z-index: 0;
-  box-shadow: 0 0 0 0 #ffd70055;
-}
-
-.vertical-menu-btn:hover::before,
-.vertical-menu-btn:focus::before,
-.horizontal-menu-btn:hover::before,
-.horizontal-menu-btn:focus::before,
-.wave-btn:hover::before,
-.wave-btn:focus::before {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1.05);
-  animation: btn-glow-pulse 1.2s infinite alternate;
-}
-
-@keyframes btn-glow-pulse {
-  0% { box-shadow: 0 0 12px 4px #ffd70055, 0 0 0 0 #ffd70022; }
-  100% { box-shadow: 0 0 32px 12px #ffd70099, 0 0 0 8px #ffd70022; }
-}
-
-/* Si quieres que los botones verdes tengan un glow verde: */
-.horizontal-menu-btn::before,
-.wave-btn::before {
-  background: radial-gradient(circle at 60% 40%, #00ff8855 0%, transparent 70%);
-}
-.horizontal-menu-btn:hover::before,
-.horizontal-menu-btn:focus::before,
-.wave-btn:hover::before,
-.wave-btn:focus::before {
-  animation: btn-green-glow-pulse 1.2s infinite alternate;
-}
-@keyframes btn-green-glow-pulse {
-  0% { box-shadow: 0 0 12px 4px #00ff8855, 0 0 0 0 #00ff8822; }
-  100% { box-shadow: 0 0 32px 12px #00ff8899, 0 0 0 8px #00ff8822; }
-}
   </style>
 </head>
 <body>

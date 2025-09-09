@@ -1,0 +1,95 @@
+.menu-animada {
+  background: linear-gradient(90deg, #6c5ce7 0%, #00d1ff 100%);
+  padding: 1.5em 2em;
+  border-radius: 2em;
+  box-shadow: 0 8px 32px 0 rgba(108,92,231,0.18), 0 2px 8px #00d1ff33;
+  max-width: 700px;
+  margin: 2em auto 2.5em auto;
+  color: #fff;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  position: relative;
+  z-index: 10;
+}
+.brand-animada {
+  font-weight: 900;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.2em;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px #0002;
+}
+.dot-animada {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#6c5ce7,#00d1ff);
+  box-shadow: 0 0 18px #00d1ff99, 0 0 8px #6c5ce7aa;
+  display: inline-block;
+}
+.menu-animada ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2em;
+  justify-content: center;
+}
+.menu-animada li {
+  margin: 0;
+}
+.menu-animada a {
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(90deg,#00d1ff 60%,#6c5ce7 100%);
+  padding: 0.7em 1.5em;
+  border-radius: 1.2em;
+  font-weight: 600;
+  font-size: 1.1em;
+  box-shadow: 0 2px 8px #00d1ff22;
+  transition: background 0.2s, transform 0.18s, box-shadow 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  position: relative;
+  overflow: hidden;
+}
+.menu-animada a.active,
+.menu-animada a:hover {
+  background: linear-gradient(90deg,#6c5ce7 60%,#00d1ff 100%);
+  color: #fff;
+  transform: scale(1.08) rotate(-2deg);
+  box-shadow: 0 4px 16px #00d1ff44, 0 2px 8px #6c5ce744;
+}
+.menu-animada a::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at 70% 30%, #fff5 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.menu-animada a:hover::after {
+  opacity: 1;
+}
+@media (max-width: 600px) {
+  .menu-animada {
+    padding: 1em 0.5em;
+    max-width: 98vw;
+    border-radius: 1em;
+  }
+  .brand-animada {
+    font-size: 1.2rem;
+  }
+  .menu-animada ul {
+    gap: 0.5em;
+  }
+  .menu-animada a {
+    font-size: 0.95em;
+    padding: 0.5em 0.8em;
+  }
+}

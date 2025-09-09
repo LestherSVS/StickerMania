@@ -1,13 +1,20 @@
+
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Catalogo from "./pages/Catalogo";
+import Home from "./Home";
+import Catalogo from "./catalogo";
+import MenuAnimado from "./MenuAnimado";
+import "./MenuAnimado.css";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/catalogo" element={<Catalogo />} />
-    </Routes>
+    <>
+      <MenuAnimado />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/catalogo" element={<Catalogo />} />
+        {/* Puedes agregar más rutas aquí si creas más páginas */}
+      </Routes>
+    </>
   );
 }
 
